@@ -39,7 +39,8 @@ class FileProcessor:
         if not hasattr(self, '_filecontent'):
             self._getFileContent()
         for pattern in patternList:
-            if re.search(pattern, self._filecontent, flags=re.I|re.M) is None:
+            regObject = re.compile(pattern, flags=re.I|re.M)
+            if regObject.search(self._filecontent, 7000, 11000) is None:
                 return False
 
         return True
