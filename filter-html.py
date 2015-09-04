@@ -28,7 +28,7 @@ def getAllFiles():
         files.extend(filenames)
         break
 
-    files = filter(lambda x: not x.startswith('.'), files)
+    files = list(filter(lambda x: not x.startswith('.'), files))
 
     return files
 
@@ -36,19 +36,20 @@ def main():
 
     titlePattern    = "(.)*<div\sid=\"title\">(\s)*game(.+)of(.+)thrones(.*)"
     categoryPattern = "<dt>type:</dt>(\s*)<dd><a href=(.+)Video(.*)TV(.*)shows</a></dd>"
-    patternList  = [titlePattern, categoryPattern]
+    seedCountPattern = "<dt>Seeders:</dt>(\s*)<dd>[1-9][0-9]*</dd>"
+    patternList  = [titlePattern, categoryPattern, seedCountPattern]
 
     count = 0
     files = getAllFiles()
     for file in files:
         fileProcessor = FileProcessor(FILE_PATH, file)
 
-        if fileProcessor.checkForContent(patternList):
+        if fileProcessor.checkForContent(patternList, startpos=7000, endpos=11000):
             moveToTarget(file, FILTER_PATH)
             count += 1
         else:
             moveToTarget(file, FAILED_PATH)
-        print('done')
-    print(count)
+
+    print(count/len(files))
 
 main()

@@ -35,12 +35,12 @@ class FileProcessor:
         fileptr.close()
         return self._filecontent
 
-    def checkForContent(self, patternList):
+    def checkForContent(self, patternList, startpos, endpos):
         if not hasattr(self, '_filecontent'):
             self._getFileContent()
         for pattern in patternList:
             regObject = re.compile(pattern, flags=re.I|re.M)
-            if regObject.search(self._filecontent, 7000, 11000) is None:
+            if regObject.search(self._filecontent, startpos, endpos) is None:
                 return False
 
         return True
